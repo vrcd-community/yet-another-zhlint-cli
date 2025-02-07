@@ -1,0 +1,28 @@
+{
+  "name": "yet-another-zhlint-cli",
+  "version": "0.1.0",
+  "type": "module",
+  "license": "MIT",
+  "packageManager": "yarn@4.6.0",
+  "dependencies": {
+    "@actions/core": "^1.11.1",
+    "chalk": "^5.4.1",
+    "cli-table3": "^0.6.5",
+    "commander": "^13.1.0",
+    "glob": "^11.0.1",
+    "zhlint": "^0.8.2"
+  },
+  "devDependencies": {
+    "@tsconfig/node-lts": "^22.0.1",
+    "@types/node": "^22.13.1",
+    "pkgroll": "^2.6.1",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3"
+  },
+  "bin": "./dist/cli.js",
+  "scripts": {
+    "build": "pkgroll --clean-dist --minify --target=node18",
+    "dev": "tsx watch --clear-screen=false --include './src/**/*' ./src/cli.ts",
+    "type-check": "tsc --noEmit"
+  }
+}

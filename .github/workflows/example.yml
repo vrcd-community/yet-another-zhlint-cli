@@ -1,0 +1,17 @@
+name: Example Run
+
+on:
+  workflow_dispatch: 
+
+jobs:
+  example-run:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: corepack enable && yarn install
+
+      - name: Example Run
+        run: yarn run tsx ./src/cli.ts ./example.md

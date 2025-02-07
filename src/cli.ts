@@ -1,15 +1,17 @@
-import chalk from 'chalk'
-import CliTable3 from 'cli-table3';
+import path from 'node:path'
+import { format } from 'node:util'
+import { readFile } from 'node:fs/promises'
+import { env } from 'node:process';
 
-import { program } from 'commander'
 import { glob } from 'glob'
-import { readFile } from 'node:fs/promises';
-import path from 'node:path';
+
+import chalk from 'chalk'
+import CliTable3 from 'cli-table3'
+import { program } from 'commander'
 
 import { readRc, Result, runWithConfig } from 'zhlint'
 
 import * as core from '@actions/core'
-import { env } from 'node:process';
 
 program
   .name('yet-another-zhlint-cli')
@@ -33,7 +35,7 @@ const options = program.opts()
 const loggerConsole: Console = {
   ...console,
   log: (message, ...optionalParams) => {
-    console.log(`${chalk.blue('[zhlint:readRc()]')} ` + message, ...optionalParams)
+    console.log(`${chalk.blue('[zhlint:readRc()]')} ` + format(message, optionalParams))
   }
 }
 
@@ -41,7 +43,7 @@ const ignoreConfigFile = options.ignore as string
 const caseIgnoreConfigFile = options.caseIgnore as string
 const configFile = options.config as string
 const workdir = options.dir as string
-const inGithubAction = env.GITHUB_ACTIONS || options.githubActions as boolean
+const inGithubAction = env.GITHUB_ACTIONS ?? options.githubActions as boolean
 
 const filePattern = program.args[0]
 
@@ -93,7 +95,7 @@ results.map(({ filePath, lintResult, rawContent }) => {
       validations.push({ filePath, message: validation.message, startPosition: errorStartPosition, endPosition: errorEndPosition })
 
       return [
-        chalk.gray(`  ${errorStartPosition.line}:${errorStartPosition.column} `),
+        chalk.gray(`  ${errorStartPosition.line.toString()}:${errorStartPosition.column.toString()} `),
         chalk.yellow('problem '),
         chalk.bold(validation.message),
         chalk.gray(validation.target)
@@ -108,11 +110,11 @@ const totalProblemCount = results.map(result => result.lintResult.validations.le
 
 console.log()
 if (totalProblemCount) {
-  console.log(chalk.bold.yellow(`⚠️ ${totalProblemCount} problems found\n  you can try to fix them with \`--fix\` option`))
+  console.log(chalk.bold.yellow(`⚠️ ${totalProblemCount.toString()} problems found\n  you can try to fix them with \`--fix\` option`))
 }
 
 if (lintFails.length) {
-  console.log(chalk.bold.red(`✖ ${lintFails.length} files failed to lint`))
+  console.log(chalk.bold.red(`✖ ${lintFails.length.toString()} files failed to lint`))
 }
 
 if (totalProblemCount || lintFails.length) {
@@ -120,15 +122,17 @@ if (totalProblemCount || lintFails.length) {
 }
 
 if (inGithubAction) {
-  core.group('Generate annotations', async () => {
-    validations.forEach(({ filePath, message, startPosition, endPosition }) => {
-      core.warning(message, { file: filePath, startLine: startPosition.line, startColumn: startPosition.column, endLine: endPosition.line, endColumn: endPosition.column, title: 'problem' })
-    })
+  core.startGroup('Generate annotations')
 
-    lintFails.forEach(({ filePath, error }) => {
-      core.error(error instanceof Error ? `${error.name}: ${error.message}\n${error.stack}` : error ? error.toString() : 'Empty Error', { file: filePath })
-    })
+  validations.forEach(({ filePath, message, startPosition, endPosition }) => {
+    core.warning(message, { file: filePath, startLine: startPosition.line, startColumn: startPosition.column, endLine: endPosition.line, endColumn: endPosition.column, title: 'problem' })
   })
+
+  lintFails.forEach(({ filePath, error }) => {
+    core.error(format(error), { file: filePath })
+  })
+
+  core.endGroup()
 }
 
 process.exitCode = totalProblemCount || lintFails.length ? core.ExitCode.Failure : core.ExitCode.Success

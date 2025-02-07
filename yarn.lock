@@ -1044,6 +1044,31 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@vrcd-community/yet-another-zhlint-cli@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "@vrcd-community/yet-another-zhlint-cli@workspace:."
+  dependencies:
+    "@actions/core": "npm:^1.11.1"
+    "@eslint/js": "npm:^9.19.0"
+    "@tsconfig/node-lts": "npm:^22.0.1"
+    "@types/node": "npm:^22.13.1"
+    chalk: "npm:^5.4.1"
+    cli-table3: "npm:^0.6.5"
+    commander: "npm:^13.1.0"
+    eslint: "npm:^9.19.0"
+    glob: "npm:^11.0.1"
+    globals: "npm:^15.14.0"
+    jiti: "npm:^2.4.2"
+    pkgroll: "npm:^2.6.1"
+    tsx: "npm:^4.19.2"
+    typescript: "npm:^5.7.3"
+    typescript-eslint: "npm:^8.23.0"
+    zhlint: "npm:^0.8.2"
+  bin:
+    yet-another-zhlint-cli: ./dist/cli.js
+  languageName: unknown
+  linkType: soft
+
 "abbrev@npm:^3.0.0":
   version: 3.0.0
   resolution: "abbrev@npm:3.0.0"
@@ -3816,31 +3841,6 @@ __metadata:
   checksum: 10c0/a499c81ce6d4a1d260d4ea0f6d49ab4da09681e32c3f0472dee16667ed69d01dae63a3b81745a24bd78476ec4fcf856114cb4896ace738e01da34b2c42235416
   languageName: node
   linkType: hard
-
-"yet-another-zhlint-cli@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "yet-another-zhlint-cli@workspace:."
-  dependencies:
-    "@actions/core": "npm:^1.11.1"
-    "@eslint/js": "npm:^9.19.0"
-    "@tsconfig/node-lts": "npm:^22.0.1"
-    "@types/node": "npm:^22.13.1"
-    chalk: "npm:^5.4.1"
-    cli-table3: "npm:^0.6.5"
-    commander: "npm:^13.1.0"
-    eslint: "npm:^9.19.0"
-    glob: "npm:^11.0.1"
-    globals: "npm:^15.14.0"
-    jiti: "npm:^2.4.2"
-    pkgroll: "npm:^2.6.1"
-    tsx: "npm:^4.19.2"
-    typescript: "npm:^5.7.3"
-    typescript-eslint: "npm:^8.23.0"
-    zhlint: "npm:^0.8.2"
-  bin:
-    yet-another-zhlint-cli: ./dist/cli.js
-  languageName: unknown
-  linkType: soft
 
 "yocto-queue@npm:^0.1.0":
   version: 0.1.0

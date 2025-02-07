@@ -1,5 +1,5 @@
 {
-  "name": "yet-another-zhlint-cli",
+  "name": "@vrcd-community/yet-another-zhlint-cli",
   "version": "0.1.0",
   "type": "module",
   "license": "MIT",

@@ -1,0 +1,49 @@
+name: Publish
+
+on:
+  push:
+    tags:
+      - "*"
+
+permissions:
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: yarn
+      
+      - name: Install dependencies
+        run: corepack enable && yarn install
+
+      - name: Bulid
+        run: yarn run build
+
+  publish-npm:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: yarn
+
+      - name: Install dependencies
+        run: corepack enable && yarn install --immutable
+
+      - run: yarn npm publish --access public --tolerate-republish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.npm_token }}

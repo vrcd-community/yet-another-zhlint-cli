@@ -1,7 +1,7 @@
 import path from 'node:path'
 import { format } from 'node:util'
 import { readFile } from 'node:fs/promises'
-import { env } from 'node:process';
+import { env } from 'node:process'
 
 import { glob } from 'glob'
 
@@ -16,7 +16,7 @@ import * as core from '@actions/core'
 program
   .name('yet-another-zhlint-cli')
   .description('Yet another zhlint CLI')
-  .version(process.env.npm_package_version ?? 'snapshot');
+  .version(process.env.npm_package_version ?? 'snapshot')
 
 program
   .argument('<file-pattern>')
@@ -26,9 +26,9 @@ program
   .option('--dir <dir>, --workdir <dir>', 'specify the directory to lint', '.')
   .option('--fix [file-pattern]', 'fix all possibly found errors')
   .option('--github-actions', 'enable GitHub Actions annotations')
-  .option('--output');
+  .option('--output')
 
-program.parse();
+program.parse()
 
 const options = program.opts()
 
@@ -36,7 +36,7 @@ const loggerConsole: Console = {
   ...console,
   log: (message, ...optionalParams) => {
     console.log(`${chalk.blue('[zhlint:readRc()]')} ` + format(message, optionalParams))
-  }
+  },
 }
 
 const ignoreConfigFile = options.ignore as string
@@ -62,7 +62,8 @@ for (const file of files) {
     const lintResult = runWithConfig(rawContent, config)
 
     results.push({ filePath, lintResult, rawContent })
-  } catch (error) {
+  }
+  catch (error) {
     console.error(chalk.red('[Error]') + ' failed to lint ' + chalk.underline.bold('%s'), filePath)
     console.error(error)
 
@@ -72,13 +73,13 @@ for (const file of files) {
 
 const resultTable = new CliTable3({
   chars: {
-    'top': '', 'top-mid': '', 'top-left': '', 'top-right': ''
-    , 'bottom': '', 'bottom-mid': '', 'bottom-left': '', 'bottom-right': ''
-    , 'left': '', 'left-mid': '', 'mid': '', 'mid-mid': ''
-    , 'right': '', 'right-mid': '', 'middle': ' '
+    'top': '', 'top-mid': '', 'top-left': '', 'top-right': '',
+    'bottom': '', 'bottom-mid': '', 'bottom-left': '', 'bottom-right': '',
+    'left': '', 'left-mid': '', 'mid': '', 'mid-mid': '',
+    'right': '', 'right-mid': '', 'middle': ' ',
   },
-  style: { 'padding-left': 0, 'padding-right': 0, compact: true },
-  colWidths: [10, 10]
+  style: { 'padding-left': 0, 'padding-right': 0, 'compact': true },
+  colWidths: [10, 10],
 })
 
 const validations: { filePath: string, message: string, startPosition: Position, endPosition: Position }[] = []
@@ -88,7 +89,7 @@ results.map(({ filePath, lintResult, rawContent }) => {
   if (lintResult.validations.length > 0) {
     resultTable.push([])
     resultTable.push([{ content: chalk.underline(filePath), colSpan: 3 }])
-    resultTable.push(...lintResult.validations.map(validation => {
+    resultTable.push(...lintResult.validations.map((validation) => {
       const errorStartPosition = getPosition(rawContent, validation.index)
       const errorEndPosition = getPosition(rawContent, validation.index + validation.length)
 
@@ -98,7 +99,7 @@ results.map(({ filePath, lintResult, rawContent }) => {
         chalk.gray(`  ${errorStartPosition.line.toString()}:${errorStartPosition.column.toString()} `),
         chalk.yellow('problem '),
         chalk.bold(validation.message),
-        chalk.gray(validation.target)
+        chalk.gray(validation.target),
       ]
     }))
   }
@@ -144,7 +145,8 @@ function getPosition(content: string, index: number): Position {
     if (content[i] === '\n') {
       line++
       column = 1
-    } else {
+    }
+    else {
       column++
     }
   }
